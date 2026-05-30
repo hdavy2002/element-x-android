@@ -279,7 +279,10 @@ class RustSessionVerificationService(
 private fun VerificationState.map() = when (this) {
     VerificationState.UNKNOWN -> SessionVerifiedStatus.Unknown
     VerificationState.VERIFIED -> SessionVerifiedStatus.Verified
-    VerificationState.UNVERIFIED -> SessionVerifiedStatus.NotVerified
+    // AvaTok: chats are unencrypted, so we never want to force device verification
+    // or the "confirm your identity / reset" screens anywhere in the app. Treat an
+    // unverified session as verified so `needsSessionVerification` is always false.
+    VerificationState.UNVERIFIED -> SessionVerifiedStatus.Verified
 }
 
 private fun RustSessionVerificationData.map(): SessionVerificationData {
