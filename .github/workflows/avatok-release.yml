@@ -1,0 +1,57 @@
+name: AvaTok Release APK
+
+# Builds the signed gplay (FCM) release APK for AvaTok.
+# Run manually (workflow_dispatch) or by pushing a tag like v0.1.0.
+# Signing keystore + passwords come from repo secrets (AVATOK_*).
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Decode release keystore
+        run: echo "${{ secrets.AVATOK_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/avatok-release.keystore"
+
+      - name: Assemble gplay release APK
+        env:
+          AVATOK_KEYSTORE_FILE: ${{ runner.temp }}/avatok-release.keystore
+          AVATOK_KEYSTORE_PASSWORD: ${{ secrets.AVATOK_KEYSTORE_PASSWORD }}
+          AVATOK_KEY_ALIAS: ${{ secrets.AVATOK_KEY_ALIAS }}
+          AVATOK_KEY_PASSWORD: ${{ secrets.AVATOK_KEY_PASSWORD }}
+        run: ./gradlew :app:assembleGplayRelease --stacktrace --no-daemon
+
+      - name: List built APKs
+        run: ls -la app/build/outputs/apk/gplay/release/ || true
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: avatok-gplay-release
+          path: app/build/outputs/apk/gplay/release/*.apk
+          if-no-files-found: error
+
+      - name: Publish to GitHub Releases (tag builds only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app/build/outputs/apk/gplay/release/*.apk

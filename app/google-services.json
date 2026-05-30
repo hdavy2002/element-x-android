@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "998388047199",
+    "project_id": "avatok-comms",
+    "storage_bucket": "avatok-comms.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998388047199:android:b71ea804766d09ed30eaea",
+        "android_client_info": {
+          "package_name": "ai.avatok.chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaKcEzzLU7rleJqW9oSaciZZVsQtU-Guk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998388047199:android:2aa79d6fc101aebf30eaea",
+        "android_client_info": {
+          "package_name": "com.avatok.comms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaKcEzzLU7rleJqW9oSaciZZVsQtU-Guk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -96,6 +96,17 @@ android {
             storePassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD")
                 ?: project.property("signing.element.nightly.storePassword") as? String?
         }
+        // AvaTok fixed release keystore — provided by CI via env vars so future
+        // builds install in place. Falls back to the debug key for local builds.
+        register("avatokRelease") {
+            val ks = System.getenv("AVATOK_KEYSTORE_FILE")
+            if (ks != null) {
+                storeFile = file(ks)
+                storePassword = System.getenv("AVATOK_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("AVATOK_KEY_ALIAS")
+                keyPassword = System.getenv("AVATOK_KEY_PASSWORD")
+            }
+        }
     }
 
     val baseAppName = BuildTimeConfig.APPLICATION_NAME
@@ -122,7 +133,11 @@ android {
                 "login_redirect_scheme",
                 oAuthRedirectSchemeBase,
             )
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = if (System.getenv("AVATOK_KEYSTORE_FILE") != null) {
+                signingConfigs.getByName("avatokRelease")
+            } else {
+                signingConfigs.getByName("debug")
+            }
 
             optimization {
                 enable = true
