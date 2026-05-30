@@ -21,11 +21,11 @@
   <string name="screen_create_new_recovery_key_list_item_5">"Save your new recovery key in a password manager or encrypted note"</string>
   <string name="screen_create_new_recovery_key_title">"Reset the encryption for your account using another device"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Continue reset"</string>
-  <string name="screen_encryption_reset_bullet_1">"Your account details, contacts, preferences, and chat list will be kept"</string>
-  <string name="screen_encryption_reset_bullet_2">"You will lose any message history that’s stored only on the server"</string>
-  <string name="screen_encryption_reset_bullet_3">"You will need to verify all your existing devices and contacts again"</string>
-  <string name="screen_encryption_reset_footer">"Only reset your digital identity if you don\'t have access to another verified device and you don\'t have your recovery key."</string>
-  <string name="screen_encryption_reset_title">"Can\'t confirm? You’ll need to reset your digital identity."</string>
+  <string name="screen_encryption_reset_bullet_1">"Your account, contacts, and chat list are kept - nothing is deleted"</string>
+  <string name="screen_encryption_reset_bullet_2">"Older messages won't open on this device, because they were locked with the recovery key you didn't save"</string>
+  <string name="screen_encryption_reset_bullet_3">"You'll confirm your other devices and contacts again"</string>
+  <string name="screen_encryption_reset_footer">"Only do this if you're not signed in on another device and you didn't save your recovery key. New messages will work normally afterwards."</string>
+  <string name="screen_encryption_reset_title">"No recovery key saved? Set up fresh on this device"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Delete"</string>
   <string name="screen_key_backup_disable_confirmation_description">"You will lose your encrypted chat history and need to reset your digital identity if you remove all your devices."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Are you sure you want to delete key storage?"</string>
