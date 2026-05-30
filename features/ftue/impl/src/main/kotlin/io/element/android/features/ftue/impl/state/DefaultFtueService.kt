@@ -116,7 +116,10 @@ class DefaultFtueService(
     }
 
     private suspend fun isSessionNotVerified(): Boolean {
-        return sessionVerificationService.sessionVerifiedStatus.value == SessionVerifiedStatus.NotVerified && !canSkipVerification()
+        // AvaTok: chats are unencrypted by default, so we never force the
+        // session-verification / recovery-key onboarding after login. The user
+        // goes straight from sign-in to their chat list.
+        return false
     }
 
     private suspend fun canSkipVerification(): Boolean {

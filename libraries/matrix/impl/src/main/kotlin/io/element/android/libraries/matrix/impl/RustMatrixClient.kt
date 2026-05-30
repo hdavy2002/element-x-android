@@ -426,7 +426,8 @@ class RustMatrixClient(
     override suspend fun createDM(userId: UserId): Result<RoomId> {
         val createRoomParams = CreateRoomParameters(
             name = null,
-            isEncrypted = true,
+            // AvaTok: 1:1 chats are unencrypted by default for a seamless, WhatsApp-like UX.
+            isEncrypted = false,
             isDirect = true,
             visibility = RoomVisibility.Private,
             preset = RoomPreset.TRUSTED_PRIVATE_CHAT,

@@ -256,7 +256,8 @@ class ConfigureRoomPresenter(
                     CreateRoomParameters(
                         name = config.roomName,
                         topic = config.topic,
-                        isEncrypted = true,
+                        // AvaTok: rooms are unencrypted by default for a seamless UX.
+                        isEncrypted = false,
                         isDirect = false,
                         visibility = RoomVisibility.Private,
                         historyVisibilityOverride = RoomHistoryVisibility.Invited,
