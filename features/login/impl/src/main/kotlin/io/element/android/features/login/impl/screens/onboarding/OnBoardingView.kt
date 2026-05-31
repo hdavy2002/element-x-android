@@ -48,7 +48,6 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
@@ -322,14 +321,7 @@ private fun OnBoardingButtons(
         } else {
             CommonStrings.action_continue
         }
-        if (state.canLoginWithQrCode) {
-            Button(
-                text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code),
-                leadingIcon = IconSource.Vector(CompoundIcons.QrCode()),
-                onClick = onSignInWithQrCode,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        // AvaTok: "Sign in with QR code" button removed — not used.
         val defaultAccountProvider = state.defaultAccountProvider
         if (defaultAccountProvider == null) {
             Button(
