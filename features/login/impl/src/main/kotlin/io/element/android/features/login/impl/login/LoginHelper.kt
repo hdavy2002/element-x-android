@@ -73,19 +73,21 @@ class LoginHelper(
                     throw it
                 }
             }.map { matrixHomeServerDetails ->
-                if (matrixHomeServerDetails.supportsOAuthLogin) {
-                    // Retrieve the details right now
-                    val oAuthPrompt = if (isAccountCreation) OAuthPrompt.Create else OAuthPrompt.Login
+                // AvaTok: for sign-in, always use the NATIVE in-app username/password
+                // form instead of the browser-based OAuth/OIDC flow, so the user never
+                // leaves the app (no browser bounce, no consent page, no remembered
+                // sessions). The homeserver (MAS) supports m.login.password via its
+                // compatibility layer. Account creation still uses the web flow.
+                if (!isAccountCreation) {
+                    LoginMode.PasswordLogin
+                } else if (matrixHomeServerDetails.supportsOAuthLogin) {
+                    val oAuthPrompt = OAuthPrompt.Create
                     LoginMode.OAuth(
                         authenticationService.getOAuthUrl(prompt = oAuthPrompt, loginHint = loginHint).getOrThrow()
                     )
-                } else if (isAccountCreation) {
+                } else {
                     val url = webClientUrlForAuthenticationRetriever.retrieve(homeserverUrl)
                     LoginMode.AccountCreation(url)
-                } else if (matrixHomeServerDetails.supportsPasswordLogin) {
-                    LoginMode.PasswordLogin
-                } else {
-                    error("Unsupported login flow")
                 }
             }.getOrThrow()
         }.runCatchingUpdatingState(
