@@ -10,6 +10,7 @@ package io.element.android.libraries.pushproviders.firebase
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -27,6 +28,7 @@ class FirebasePushProvider(
     private val pusherSubscriber: PusherSubscriber,
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
     private val firebaseTokenRotator: FirebaseTokenRotator,
+    private val firebaseTokenGetter: FirebaseTokenGetter,
     private val firebaseGatewayProvider: FirebaseGatewayProvider,
 ) : PushProvider {
     override val index = FirebaseConfig.INDEX
@@ -40,12 +42,22 @@ class FirebasePushProvider(
     }
 
     override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {
-        val pushKey = firebaseStore.getFcmToken() ?: return Result.failure<Unit>(
-            IllegalStateException(
-                "Unable to register pusher, Firebase token is not known."
-            )
-        ).also {
+        // AvaTok: upstream only registers the pusher if a token was already cached by a prior
+        // onNewToken() callback. On many devices that callback races behind login (or never
+        // re-fires after an app-data reset / OEM delay), so the token stays unknown and push is
+        // permanently broken until the user manually runs "Troubleshoot > Attempt to fix".
+        // Instead, fetch the token on demand here when the cache is empty — the same operation
+        // the troubleshooter performs — so pusher registration self-heals on every login.
+        val pushKey = firebaseStore.getFcmToken()
+            ?: runCatchingExceptions { firebaseTokenGetter.get() }
+                .onSuccess { firebaseStore.storeFcmToken(it) }
+                .onFailure { Timber.tag(loggerTag.value).w(it, "On-demand Firebase token fetch failed") }
+                .getOrNull()
+        if (pushKey == null) {
             Timber.tag(loggerTag.value).w("Unable to register pusher, Firebase token is not known.")
+            return Result.failure(
+                IllegalStateException("Unable to register pusher, Firebase token is not known.")
+            )
         }
         return pusherSubscriber.registerPusher(
             matrixClient = matrixClient,
