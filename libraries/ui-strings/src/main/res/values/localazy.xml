@@ -176,8 +176,8 @@
   <string name="action_share_live_location">"Share live location"</string>
   <string name="action_show">"Show"</string>
   <string name="action_sign_in_again">"Sign in again"</string>
-  <string name="action_signout">"Remove this device"</string>
-  <string name="action_signout_anyway">"Remove this device anyway"</string>
+  <string name="action_signout">"Sign out"</string>
+  <string name="action_signout_anyway">"Sign out anyway"</string>
   <string name="action_skip">"Skip"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
