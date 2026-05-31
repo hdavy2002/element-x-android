@@ -469,8 +469,8 @@ Are you sure you want to continue?"</string>
   <string name="error_room_address_invalid_symbols">"Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
-  <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
-  <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
+  <string name="invite_friends_rich_title">"Join me on %1$s"</string>
+  <string name="invite_friends_text">"Hey, message me on %1$s: %2$s"</string>
   <string name="live_location_sharing_foreground_service_channel_title_android">"Live Location Sharing"</string>
   <string name="live_location_sharing_foreground_service_message_android">"Location sharing in progress"</string>
   <string name="live_location_sharing_foreground_service_title_android">"%1$s Live Location"</string>
