@@ -180,14 +180,7 @@ private fun ColumnScope.ManageAppSection(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
         onClick = onOpenLockScreenSettings,
     )
-    if (state.showSecureBackup) {
-        ListItem(
-            headlineContent = { Text(stringResource(id = CommonStrings.common_encryption)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Key())),
-            trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
-            onClick = onSecureBackupClick,
-        )
-    }
+    // AvaTok: Encryption settings hidden (unencrypted, seamless UX).
     HorizontalDivider()
 }
 
@@ -243,18 +236,7 @@ private fun ColumnScope.GeneralSection(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
         onClick = onOpenAdvancedSettings,
     )
-    if (state.showLabsItem) {
-        ListItem(
-            headlineContent = { Text(stringResource(id = R.string.screen_labs_title)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Labs())),
-            onClick = onOpenLabs,
-        )
-    }
-    ListItem(
-        headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
-        onClick = onOpenAbout,
-    )
+    // AvaTok: Labs and About entries hidden.
     if (state.canReportBug) {
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
