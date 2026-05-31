@@ -119,6 +119,25 @@
                 <data android:path="/element/" />
             </intent-filter>
             <!--
+              AvaTok invite links: https://avatok.ai/i/<user> (start a chat) and
+              https://avatok.ai/r/<room> (join a room). Verified App Links so tapping
+              opens AvaTok directly; if the app isn't installed the browser opens the
+              avatok.ai download page. Scoped to /i/ and /r/ so the rest of avatok.ai
+              (the website) is never intercepted.
+              Matching asset file: https://avatok.ai/.well-known/assetlinks.json
+            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="avatok.ai" />
+                <data android:pathPrefix="/i/" />
+                <data android:pathPrefix="/r/" />
+            </intent-filter>
+            <!--
               matrix: links
             -->
             <intent-filter>
