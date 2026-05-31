@@ -34,8 +34,11 @@ plugins {
     id("kotlin-parcelize")
     alias(libs.plugins.licensee)
     alias(libs.plugins.kotlin.serialization)
-    // To be able to update the firebase.xml files, uncomment and build the project
-    // alias(libs.plugins.gms.google.services)
+    // AvaTok: enabled so the build processes app/google-services.json (avatok-comms
+    // project) and generates the Firebase config (sender id, api key, project id) at
+    // build time. Without this, the app has no Firebase config and FCM tokens never
+    // register, so push / waking a sleeping phone never works.
+    alias(libs.plugins.gms.google.services)
 }
 
 android {
