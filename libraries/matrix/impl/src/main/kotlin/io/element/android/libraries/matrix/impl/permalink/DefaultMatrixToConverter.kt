@@ -33,6 +33,21 @@ class DefaultMatrixToConverter : MatrixToConverter {
      * - element://user/@alice:matrix.org                            ->  https://matrix.to/#/@alice:matrix.org
      */
     override fun convert(uri: Uri): Uri? {
+        // AvaTok invite deep links: https://avatok.ai/i/<localpart> -> matrix.to user link,
+        // https://avatok.ai/r/<roomAliasOrId> -> matrix.to room link.
+        if (uri.host == "avatok.ai") {
+            val segments = uri.pathSegments
+            if (segments.size >= 2) {
+                val target = segments[1]
+                when (segments[0]) {
+                    "i" -> {
+                        val localpart = target.removePrefix("@").substringBefore(":")
+                        return (MatrixConfiguration.MATRIX_TO_PERMALINK_BASE_URL + "@" + localpart + ":avatok.ai").toUri()
+                    }
+                    "r" -> return (MatrixConfiguration.MATRIX_TO_PERMALINK_BASE_URL + target).toUri()
+                }
+            }
+        }
         val uriString = uri.toString()
             // Handle links coming from the matrix.to website.
             .replacePrefix(MATRIX_TO_CUSTOM_SCHEME_BASE_URL, "https://app.element.io/#/")
