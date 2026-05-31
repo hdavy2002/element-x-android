@@ -45,6 +45,7 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -95,6 +96,14 @@ fun OnBoardingView(
             onCreateAccount = onCreateAccount,
             onReportProblem = onReportProblem,
         )
+    }
+
+    // AvaTok: while the login/first-sync is completing (e.g. after returning from
+    // the browser sign-in), show a clear "setting you up" screen instead of the
+    // onboarding page with a spinning button, which looks like being back at square one.
+    if (state.loginMode is AsyncData.Loading) {
+        OnBoardingSettingUp(modifier = modifier)
+        return
     }
 
     if (state.isAddingAccount) {
@@ -187,6 +196,44 @@ private fun AddOtherAccountScaffold(
         buttons = { buttons() },
         content = loginView,
         onBackClick = onBackClick,
+    )
+}
+
+@Composable
+private fun OnBoardingSettingUp(
+    modifier: Modifier = Modifier,
+) {
+    OnBoardingPage(
+        modifier = modifier,
+        renderBackground = true,
+        content = {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = CenterHorizontally,
+                ) {
+                    CircularProgressIndicator()
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        text = "Setting you up…",
+                        color = ElementTheme.colors.textPrimary,
+                        style = ElementTheme.typography.fontHeadingLgBold,
+                        textAlign = TextAlign.Center,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Hang tight — this just takes a sec.",
+                        color = ElementTheme.colors.textSecondary,
+                        style = ElementTheme.typography.fontBodyLgRegular,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+        },
+        footer = {},
     )
 }
 
