@@ -9,6 +9,7 @@
 package io.element.android.libraries.push.impl.battery
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,18 @@ class BatteryOptimizationPresenter(
         val storeShouldDisplayBanner by pushDataStore.shouldDisplayBatteryOptimizationBannerFlow.collectAsState(initial = false)
         var isSystemIgnoringBatteryOptimizations by remember {
             mutableStateOf(batteryOptimization.isIgnoringBatteryOptimizations())
+        }
+
+        // AvaTok: upstream Element ships this banner but never triggers it, so users were
+        // never asked to exempt the app from battery optimisation. Without that exemption
+        // Android Doze freezes the app while the phone sleeps, the background notification
+        // fetch is deferred, and messages/call rings only arrive when the phone is unlocked.
+        // Trigger the banner whenever the device is not already exempt. The store keeps it
+        // dismissed once the user dismisses it, and it hides automatically once granted.
+        LaunchedEffect(isSystemIgnoringBatteryOptimizations) {
+            if (!isSystemIgnoringBatteryOptimizations) {
+                mutableBatteryOptimizationStore.showBatteryOptimizationBanner()
+            }
         }
 
         LifecycleResumeEffect(Unit) {
