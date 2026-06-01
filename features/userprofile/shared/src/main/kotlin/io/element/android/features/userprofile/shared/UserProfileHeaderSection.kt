@@ -42,6 +42,7 @@ import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.model.toDisplayId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -94,7 +95,7 @@ fun UserProfileHeaderSection(
         }
         Text(
             modifier = Modifier.niceClickable { onUserIdClick() },
-            text = userId.value,
+            text = userId.toDisplayId(),
             style = ElementTheme.typography.fontBodyLgRegular,
             color = ElementTheme.colors.textSecondary,
             textAlign = TextAlign.Center,
