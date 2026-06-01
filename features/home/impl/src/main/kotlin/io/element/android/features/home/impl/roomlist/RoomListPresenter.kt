@@ -207,18 +207,8 @@ class RoomListPresenter(
         securityBannerDismissed: Boolean,
         recoveryState: RecoveryState,
     ): SecurityBannerState {
-        if (securityBannerDismissed) {
-            return SecurityBannerState.None
-        }
-
-        when (recoveryState) {
-            RecoveryState.DISABLED -> return SecurityBannerState.SetUpRecovery
-            RecoveryState.INCOMPLETE -> return SecurityBannerState.RecoveryKeyConfirmation
-            RecoveryState.UNKNOWN,
-            RecoveryState.WAITING_FOR_SYNC,
-            RecoveryState.ENABLED -> Unit
-        }
-
+        // AvaTok: never show the "Back up your chats / end-to-end encryption" recovery banner.
+        // AvaTok is unencrypted by design, so this is confusing Matrix/E2E branding for users.
         return SecurityBannerState.None
     }
 
