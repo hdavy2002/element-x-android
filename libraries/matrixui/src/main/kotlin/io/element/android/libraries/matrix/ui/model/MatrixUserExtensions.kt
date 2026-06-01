@@ -12,8 +12,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
+
+/**
+ * AvaTok: format a Matrix ID in email style for display, e.g. "@hum:avatok.ai" -> "hum@avatok.ai".
+ * Display only — never use this for logic or as an actual identifier (the canonical id is [UserId.value]).
+ */
+fun UserId.toDisplayId(): String {
+    val raw = value.removePrefix("@")
+    val local = raw.substringBefore(":")
+    val domain = raw.substringAfter(":", missingDelimiterValue = "")
+    return if (domain.isEmpty()) local else "$local@$domain"
+}
 
 fun MatrixUser.getAvatarData(size: AvatarSize) = AvatarData(
     id = userId.value,
@@ -23,16 +35,16 @@ fun MatrixUser.getAvatarData(size: AvatarSize) = AvatarData(
 )
 
 fun MatrixUser.getBestName(): String {
-    return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
+    return displayName?.takeIf { it.isNotEmpty() } ?: userId.toDisplayId()
 }
 
 @Composable
 fun MatrixUser.getFullName(): String {
     return displayName.let { name ->
         if (name.isNullOrBlank()) {
-            userId.value
+            userId.toDisplayId()
         } else {
-            stringResource(CommonStrings.common_name_and_id, name, userId.value)
+            stringResource(CommonStrings.common_name_and_id, name, userId.toDisplayId())
         }
     }
 }
